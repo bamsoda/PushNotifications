@@ -56,13 +56,17 @@ public class GCMIntentService extends GCMBaseIntentService {
 				createNotification(context, extras);
 			}
 		}
+		else
+		{
+		    Log.i(TAG, "onMessage - extras is null");
+		}
 	}
 
 	public void createNotification(Context context, Bundle extras)
 	{
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		String appName = getAppName(this);
-
+        Log.i(TAG, "createNotification - appName is" + appName);
 		Intent notificationIntent = new Intent(this, PushHandlerActivity.class);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		notificationIntent.putExtra("pushBundle", extras);
@@ -77,7 +81,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 			}
 			catch (NumberFormatException e) {}
 		}
-
+        if(context.getApplicationInfo().icon == null)
+        {
+            Log.i(TAG, "createNotification - icon is null");
+        }
 
 		NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
@@ -91,6 +98,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		String message = extras.getString("message");
 		if (message != null) {
+		    Log.i(TAG, "createNotification - setContentText of message");
 			mBuilder.setContentText(message);
 		} else {
 			mBuilder.setContentText("<missing message content>");
@@ -113,12 +121,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Log.e(TAG, "Number format exception - Error parsing Notification ID" + e.getMessage());
 		}
 
+        Log.i(TAG, "createNotification - mNotificationManager.notify trying to send notification");
 		mNotificationManager.notify((String) appName, notId, mBuilder.build());
 		
 	}
 
 	public static void cancelNotification(Context context)
 	{
+	    Log.i(TAG, "cancelNotification - mNotificationManager.cancel trying to cancel notification");
 		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel((String)getAppName(context), NOTIFICATION_ID);
 	}
