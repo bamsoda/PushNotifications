@@ -81,10 +81,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 			}
 			catch (NumberFormatException e) {}
 		}
-        if(context.getApplicationInfo().icon == null)
-        {
-            Log.i(TAG, "createNotification - icon is null");
-        }
 
 		NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
